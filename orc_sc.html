@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orçamento - Shopping Car</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+        }
+
+        header {
+            background-color: #e30613;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header img {
+            max-width: 400px;
+            height: auto;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #111;
+            border: 1px solid #fff;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #fff;
+            border-radius: 4px;
+            background-color: #222;
+            color: #fff;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #e30613;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .button:hover {
+            background-color: #c20510;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #222;
+            border: 1px solid #fff;
+            border-radius: 8px;
+        }
+
+        h2, h3 {
+            color: #e30613;
+        }
+
+        .print-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #444;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .print-button:hover {
+            background-color: #666;
+        }
+
+        /* Estilo do Pop-up e Overlay */
+        #whatsappPopup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #222;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #fff;
+            z-index: 1000;
+            color: #fff;
+            text-align: center;
+        }
+
+        #whatsappPopup input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            background-color: #333;
+            color: #fff;
+        }
+
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://assets.cdn.filesafe.space/4H828ipVmbHZOhk7fX6Z/media/66e99066b65cd8f85a116217.png" alt="Logo Shopping Car">
+        <h1>Orçamento - Shopping Car</h1>
+    </header>
+    <main>
+        <div class="container">
+            <form id="budgetForm">
+                <label for="tirePrice">Valor do Pneu</label>
+                <input type="number" id="tirePrice" placeholder="Digite o valor do pneu" required>
+
+                <label for="tireOrigin">Nacionalidade do Pneu</label>
+                <select id="tireOrigin" required>
+                    <option value="">Selecione</option>
+                    <option value="nacional">Nacional</option>
+                    <option value="importado">Importado</option>
+                </select>
+
+                <div id="brandSelection" style="display: none;">
+                    <label for="tireBrand">Marca do Pneu</label>
+                    <select id="tireBrand">
+                        <option value="">Selecione a marca</option>
+                    </select>
+                </div>
+
+                <label for="alignmentPrice">Valor do Alinhamento e Balanceamento</label>
+                <select id="alignmentPrice" required>
+                    <option value="90">R$ 90,00</option>
+                    <option value="100">R$ 100,00</option>
+                    <option value="110">R$ 110,00</option>
+                    <option value="120">R$ 120,00</option>
+                    <option value="130">R$ 130,00</option>
+                    <option value="140">R$ 140,00</option>
+                    <option value="150">R$ 150,00</option>
+                    <option value="160">R$ 160,00</option>
+                    <option value="180">R$ 180,00</option>
+                    <option value="200">R$ 200,00</option>
+                </select>
+
+                <label for="tireQuantity">Quantidade de Pneus</label>
+                <select id="tireQuantity" required>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+
+                <label for="bicoPrice">Valor do Bico</label>
+                <select id="bicoPrice" required>
+                    <option value="10">R$ 10,00</option>
+                    <option value="15">R$ 15,00</option>
+                    <option value="20">R$ 20,00</option>
+                    <option value="25">R$ 25,00</option>
+                    <option value="30">R$ 30,00</option>
+                    <option value="35">R$ 35,00</option>
+                    <option value="40">R$ 40,00</option>
+                </select>
+
+                <button type="button" class="button" onclick="generateBudget()">Gerar Orçamento</button>
+            </form>
+
+            <div id="result" class="result" style="display: none;">
+                <h2>Orçamento Gerado</h2>
+                <div id="budgetDetails"></div>
+                <button class="print-button" onclick="printBudget()">Imprimir Orçamento</button>
+                <button class="button whatsapp-button" onclick="openWhatsAppPopup()">Enviar via WhatsApp</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Pop-up para inserção do número de telefone -->
+    <div id="whatsappPopup" style="display: none;">
+        <div class="popup-content">
+            <h3>Digite o número de telefone do cliente</h3>
+            <input type="tel" id="phoneNumber" placeholder="Número de telefone" />
+            <button class="button" onclick="sendViaWhatsApp()">Enviar</button>
+            <button class="button" onclick="closeWhatsAppPopup()">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Overlay para o pop-up -->
+    <div id="overlay" style="display: none;"></div>
+
+    <script>
+        const tireOrigin = document.getElementById('tireOrigin');
+        const brandSelection = document.getElementById('brandSelection');
+        const tireBrand = document.getElementById('tireBrand');
+
+        const nationalBrands = ["DUNLOP", "GOODYEAR", "PIRELLI", "CONTINENTAL", "MICHELIN"];
+        const importedBrands = ["APTANY", "LANVIGATOR", "CORDIANT", "E-LOGIC", "LINGLONG", "ECOVISION", "LANDSPIDER", "ROADBOSS", "KINGBOSS", "INVOVIC", "FERENTINO", "XBRI"];
+
+        tireOrigin.addEventListener('change', () => {
+            const selectedOrigin = tireOrigin.value;
+
+            if (selectedOrigin) {
+                brandSelection.style.display = 'block';
+                tireBrand.innerHTML = '<option value="">Selecione a marca</option>';
+                const brands = selectedOrigin === 'nacional' ? nationalBrands : importedBrands;
+                brands.forEach(brand => {
+                    const option = document.createElement('option');
+                    option.value = brand;
+                    option.textContent = brand;
+                    tireBrand.appendChild(option);
+                });
+            } else {
+                brandSelection.style.display = 'none';
+                tireBrand.innerHTML = '';
+            }
+        });
+
+        function formatCurrency(value) {
+            return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        function generateBudget() {
+            const tirePrice = parseFloat(document.getElementById('tirePrice').value) || 0;
+            const alignmentPrice = parseFloat(document.getElementById('alignmentPrice').value) || 0;
+            const tireQuantity = parseInt(document.getElementById('tireQuantity').value) || 0;
+            const bicoPrice = parseFloat(document.getElementById('bicoPrice').value) || 0;
+            const tireOriginValue = tireOrigin.value;
+            const tireBrandValue = tireBrand.value;
+
+            const bicoQuantity = tireQuantity;
+            const tireTotal = tirePrice * tireQuantity;
+            const alignmentTotal = alignmentPrice;
+            const bicoTotal = bicoPrice * bicoQuantity;
+            const total = tireTotal + alignmentTotal + bicoTotal;
+
+            const resultDiv = document.getElementById('result');
+            const budgetDetails = document.getElementById('budgetDetails');
+            resultDiv.style.display = 'block';
+
+            budgetDetails.innerHTML = `
+                <p><strong>Nacionalidade do Pneu:</strong> ${tireOriginValue === 'nacional' ? 'Nacional' : 'Importado'}</p>
+                <p><strong>Marca do Pneu:</strong> ${tireBrandValue || 'Não selecionada'}</p>
+                <p><strong>Valor do Pneu:</strong> ${formatCurrency(tirePrice)} cada</p>
+                <p><strong>Quantidade de Pneus:</strong> ${tireQuantity}</p>
+                <p><strong>Valor Total dos Pneus:</strong> ${formatCurrency(tireTotal)}</p>
+                <p><strong>Valor do Alinhamento e Balanceamento:</strong> ${formatCurrency(alignmentTotal)}</p>
+                <p><strong>Valor Total dos Bicos:</strong> ${formatCurrency(bicoTotal)}</p>
+                <h3><strong>Total:</strong> ${formatCurrency(total)}</h3>
+            `;
+        }
+
+        function printBudget() {
+            window.print();
+        }
+
+        function openWhatsAppPopup() {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('whatsappPopup').style.display = 'block';
+        }
+
+        function closeWhatsAppPopup() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('whatsappPopup').style.display = 'none';
+        }
+
+        function sendViaWhatsApp() {
+            const phoneNumber = document.getElementById('phoneNumber').value;
+
+            if (!phoneNumber) {
+                alert('Por favor, insira o número de telefone.');
+                return;
+            }
+
+            const tireOriginValue = document.getElementById('tireOrigin').value;
+            const tireBrandValue = document.getElementById('tireBrand').value || 'Não selecionada';
+            const tirePrice = parseFloat(document.getElementById('tirePrice').value) || 0;
+            const alignmentPrice = parseFloat(document.getElementById('alignmentPrice').value) || 0;
+            const tireQuantity = parseInt(document.getElementById('tireQuantity').value) || 0;
+            const bicoPrice = parseFloat(document.getElementById('bicoPrice').value) || 0;
+
+            const bicoQuantity = tireQuantity;
+            const tireTotal = tirePrice * tireQuantity;
+            const alignmentTotal = alignmentPrice;
+            const bicoTotal = bicoPrice * bicoQuantity;
+            const total = tireTotal + alignmentTotal + bicoTotal;
+
+            const message = `
+*Orçamento - Shopping Car*%0A
+*Nacionalidade do Pneu:* ${tireOriginValue === 'nacional' ? 'Nacional' : 'Importado'}%0A
+*Marca do Pneu:* ${tireBrandValue}%0A
+*Valor do Pneu:* ${formatCurrency(tirePrice)} cada%0A
+*Quantidade de Pneus:* ${tireQuantity}%0A
+*Valor Total dos Pneus:* ${formatCurrency(tireTotal)}%0A
+*Valor do Alinhamento e Balanceamento:* ${formatCurrency(alignmentTotal)}%0A
+*Valor Total dos Bicos:* ${formatCurrency(bicoTotal)}%0A
+*Total:* ${formatCurrency(total)}
+            `.trim();
+
+            const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappURL, '_blank');
+
+            closeWhatsAppPopup();
+        }
+    </script>
+</body>
+</html>
